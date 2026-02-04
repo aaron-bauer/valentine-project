@@ -1163,8 +1163,19 @@
         <div class="heart-button" id="heartButton" onclick="handleHeartClick()">💕</div>
     </div>
 
-    <script src="static/proposal.js"></script>
+    <script src="static/proposal.js?v=2"></script>
     <script>
+        // Check if proposal.js loaded correctly
+        window.addEventListener('load', () => {
+            if (typeof handleYes !== 'function') {
+                console.error('CRITICAL: proposal.js not loaded!');
+                const btn = document.querySelector('.yes-btn');
+                if (btn) {
+                    btn.onclick = () => alert('Error: Script not loaded. Please refresh the page!');
+                }
+            }
+        });
+
         // Music control
         let isPlaying = false;
         const audio = document.getElementById('backgroundMusic');
