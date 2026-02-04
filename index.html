@@ -1090,20 +1090,22 @@
                 isPlaying = true;
                 animateVisualizerBars();
             }, 500);
-        });
 
-        // Stop music when yes is clicked
-        const originalHandleYes = window.handleYes;
-        window.handleYes = function() {
-            // Don't reset audio - just make sure it's playing
-            if (audio.paused) {
-                audio.play().catch((e) => console.error('Error playing audio on YES:', e));
+            // Override handleYes after proposal.js is loaded
+            if (window.handleYes) {
+                const originalHandleYes = window.handleYes;
+                window.handleYes = function() {
+                    // Don't reset audio - just make sure it's playing
+                    if (audio.paused) {
+                        audio.play().catch((e) => console.error('Error playing audio on YES:', e));
+                    }
+                    musicBtn.textContent = '⏸';
+                    isPlaying = true;
+                    animateVisualizerBars();
+                    originalHandleYes();
+                };
             }
-            musicBtn.textContent = '⏸';
-            isPlaying = true;
-            animateVisualizerBars();
-            originalHandleYes();
-        };
+        });
     </script>
 </body>
 </html>

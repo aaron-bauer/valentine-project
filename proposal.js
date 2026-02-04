@@ -7,8 +7,12 @@ const maxScaleSteps = 10;
 
 // Handle Yes button click
 function handleYes() {
+    console.log('YES button clicked!');
     const proposal = document.getElementById('proposal');
     const successMessage = document.getElementById('successMessage');
+    
+    console.log('Proposal element:', proposal);
+    console.log('Success message element:', successMessage);
     
     proposal.style.display = 'none';
     successMessage.classList.add('show');
@@ -63,6 +67,7 @@ function playCelebrationSounds() {
 
 // Handle No button - shrinks the container progressively
 function handleNo() {
+    console.log('NO button clicked!');
     noClickCount++;
     const container = document.getElementById('mainContainer');
     const kittenContainer = document.getElementById('kittenContainer');
