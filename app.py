@@ -4,7 +4,7 @@ from datetime import datetime
 import json
 import os
 
-app = Flask(__name__, static_folder='.', static_url_path='')
+app = Flask(__name__, static_folder='static', static_url_path='/static')
 CORS(app)
 
 # File to store proposal responses
@@ -26,6 +26,11 @@ def save_responses(responses):
 def index():
     """Serve the index.html file"""
     return send_from_directory('.', 'index.html')
+
+@app.route('/static/<path:path>')
+def serve_static(path):
+    """Serve static files"""
+    return send_from_directory('static', path)
 
 @app.route('/proposal', methods=['POST'])
 def handle_proposal():

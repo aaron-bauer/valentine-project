@@ -1006,6 +1006,22 @@
         const audioControls = document.getElementById('audioControls');
         const container = document.getElementById('mainContainer');
 
+        // Log audio loading
+        audio.addEventListener('loadstart', () => {
+            console.log('Audio loading started...');
+        });
+
+        audio.addEventListener('canplay', () => {
+            console.log('Audio ready to play!');
+        });
+
+        audio.addEventListener('error', (e) => {
+            console.error('Audio error:', e);
+            console.error('Error code:', audio.error?.code);
+            console.error('Error message:', audio.error?.message);
+            alert('Could not load audio file. Make sure background-music.mp3 is in the static folder.');
+        });
+
         function toggleMusic(event) {
             event.stopPropagation();
             if (isPlaying) {
@@ -1014,7 +1030,9 @@
                 container.classList.remove('music-active');
                 isPlaying = false;
             } else {
-                audio.play().catch(() => {
+                console.log('Attempting to play audio from:', audio.src);
+                audio.play().catch((error) => {
+                    console.error('Playback error:', error);
                     console.log('Audio playback failed. Background music may be blocked by browser.');
                 });
                 musicBtn.textContent = '⏸';
@@ -1045,9 +1063,10 @@
 
         // Auto-play music when page loads
         window.addEventListener('load', () => {
+            console.log('Page loaded. Audio source:', audio.src);
             setTimeout(() => {
                 audio.play().catch(() => {
-                    console.log('Audio playback failed. Click the music button to play.');
+                    console.log('Auto-play blocked. Click the music button to play.');
                 });
                 musicBtn.textContent = '⏸';
                 container.classList.add('music-active');
@@ -1059,7 +1078,8 @@
         // Stop music when yes is clicked
         const originalHandleYes = window.handleYes;
         window.handleYes = function() {
-            audio.play();
+            audio.currentTime = 0;
+            audio.play().catch((e) => console.error('Error playing audio on YES:', e));
             musicBtn.textContent = '⏸';
             isPlaying = true;
             animateVisualizerBars();
