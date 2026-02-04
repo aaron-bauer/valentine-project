@@ -32,9 +32,10 @@ function playCelebrationSounds() {
     const container = document.getElementById('mainContainer');
     const audio = document.getElementById('backgroundMusic');
     
-    // Start music
-    audio.currentTime = 0;
-    audio.play().catch(() => console.log('Music playback failed'));
+    // Continue playing music (don't reset it) - just make sure it's playing
+    if (audio.paused) {
+        audio.play().catch(() => console.log('Music playback failed'));
+    }
     
     // Shake effect
     for (let i = 0; i < 5; i++) {
@@ -53,7 +54,7 @@ function playCelebrationSounds() {
     
     // Create music-synced confetti bursts
     const musicSyncInterval = setInterval(() => {
-        if (!audio.playing) {
+        if (audio.paused) {
             clearInterval(musicSyncInterval);
         }
         createMusicSyncedConfetti();

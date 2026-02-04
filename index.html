@@ -246,7 +246,15 @@
         .success-message {
             display: none;
             animation: popIn 0.6s ease-out;
+            background: linear-gradient(135deg, #ff1744 0%, #ff5252 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 60px 40px;
             width: 100%;
+        }
+
+        .success-message.show {
+            display: block !important;
         }
 
         @keyframes popIn {
@@ -258,10 +266,6 @@
                 opacity: 1;
                 transform: scale(1);
             }
-        }
-
-        .success-message.show {
-            display: block;
         }
 
         .confetti {
@@ -337,15 +341,6 @@
                 transform: scale(1) rotateZ(0deg);
                 opacity: 1;
             }
-        }
-
-        .success-message {
-            display: none;
-            animation: popIn 0.6s ease-out;
-            background: linear-gradient(135deg, #ff1744 0%, #ff5252 100%);
-            color: white;
-            border-radius: 20px;
-            padding: 60px 40px;
         }
 
         .success-message h1 {
@@ -1006,9 +1001,17 @@
         const audioControls = document.getElementById('audioControls');
         const container = document.getElementById('mainContainer');
 
+        console.log('Page loaded. Audio element:', audio);
+        console.log('Audio src:', audio.src);
+        console.log('Audio source elements:', audio.querySelectorAll('source'));
+
         // Log audio loading
         audio.addEventListener('loadstart', () => {
             console.log('Audio loading started...');
+        });
+
+        audio.addEventListener('loadeddata', () => {
+            console.log('Audio data loaded!');
         });
 
         audio.addEventListener('canplay', () => {
@@ -1019,7 +1022,8 @@
             console.error('Audio error:', e);
             console.error('Error code:', audio.error?.code);
             console.error('Error message:', audio.error?.message);
-            alert('Could not load audio file. Make sure background-music.mp3 is in the static folder.');
+            console.error('Full error object:', audio.error);
+            alert('Could not load audio file. Check console for details.');
         });
 
         function toggleMusic(event) {
@@ -1065,6 +1069,8 @@
         window.addEventListener('load', () => {
             console.log('Page loaded. Audio source:', audio.src);
             setTimeout(() => {
+                // Start the audio at 15 seconds
+                audio.currentTime = 15;
                 audio.play().catch(() => {
                     console.log('Auto-play blocked. Click the music button to play.');
                 });
@@ -1078,8 +1084,10 @@
         // Stop music when yes is clicked
         const originalHandleYes = window.handleYes;
         window.handleYes = function() {
-            audio.currentTime = 0;
-            audio.play().catch((e) => console.error('Error playing audio on YES:', e));
+            // Don't reset audio - just make sure it's playing
+            if (audio.paused) {
+                audio.play().catch((e) => console.error('Error playing audio on YES:', e));
+            }
             musicBtn.textContent = '⏸';
             isPlaying = true;
             animateVisualizerBars();
