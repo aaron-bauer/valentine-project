@@ -288,24 +288,16 @@ window.addEventListener('load', () => {
      container.style.animation = 'slideUp 0.8s ease-out';
 });
 
-// Robust event listener attachment
-function attachButtonListeners() {
+// Add event listeners once the DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
     const yesBtn = document.querySelector('#yesBtn');
     const noBtn = document.querySelector('#noBtn');
 
    if (yesBtn && noBtn) {
        yesBtn.addEventListener('click', handleYes);
        noBtn.addEventListener('click', handleNo);
-       console.log('Button listeners attached successfully');
+         console.log('Button listeners attached successfully');
    } else {
        console.error("Yes or No button not found!");
    }
-}
-
-// Check if DOM is already loaded or still loading
-if (document.readyState === 'loading') {
-   document.addEventListener('DOMContentLoaded', attachButtonListeners);
-} else {
-    // DOM is already ready, attach immediately
-   attachButtonListeners();
-}
+});
