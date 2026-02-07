@@ -284,19 +284,24 @@ function createFireworks() {
     }
 };
 
-// Add page load animation
-window.addEventListener('load', () => {
+// ===== START FUNCTION (Called when overlay is clicked) =====
+window.startCelebration = function() {
+     console.log("Starting celebration sequence...");
      const container = document.querySelector('.container');
+     
+     // Reset animation
+     container.style.animation = 'none';
+     container.offsetHeight; /* trigger reflow */
      container.style.animation = 'slideUp 0.8s ease-out';
 
-     // ===== AUTO-START CELEBRATION (Second Template) =====
-     // Set music to start at 15 seconds
+     // Start Music
      const audio = document.querySelector('#backgroundMusic');
      if (audio) {
          audio.currentTime = 15;
+         audio.play().catch(e => console.log("Audio play failed:", e));
      }
 
-     // Trigger celebration animations immediately
+     // Trigger animations
      createConfetti();
      playRoseAnimation();
      playCelebrationSounds();
@@ -304,7 +309,7 @@ window.addEventListener('load', () => {
      // Ensure the success title has the correct name
      const successTitle = document.querySelector('#successTitle');
      if (successTitle) successTitle.textContent = `${personName}, You Make Me The Happiest Person! 🎉`;
-});
+};
 
 // --- Attach Event Listeners ---
 // This code runs after the HTML document has been parsed, so the buttons are guaranteed to exist.
